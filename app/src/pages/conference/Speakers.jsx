@@ -26,7 +26,7 @@ const FEATURED_SPEAKER = gql`
 `;
 
 // define speaker query
-const SPEAKERS = gql`
+export const SPEAKERS = gql`
 	query speakers {
 		speakers {
 			...SpeakerInfo

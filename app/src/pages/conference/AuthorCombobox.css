@@ -1,0 +1,19 @@
+.menu {
+	padding: 0;
+	max-width: 160px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	max-height: 500px;
+	overflow: scroll;
+	z-index: 10;
+	background: white;
+	list-style: none;
+	width: 100%;
+}
+
+.menu-item {
+	font-size: 1.5rem !important;
+}
+
+.menu-hidden {
+	opacity: 0;
+}

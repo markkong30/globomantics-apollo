@@ -3,6 +3,8 @@ import './style-sessions.css';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
+import AuthorCombobox from './AuthorCombobox';
+import { SPEAKERS } from './Speakers';
 
 const SESSIONS_ATTRIBUTES = gql`
 	fragment SessionInfo on Session {
@@ -105,7 +107,7 @@ function SessionItem({ session }) {
 	const { id, title, day, room, level, startsAt, speakers, description } =
 		session;
 	return (
-		<div key={id} className="col-xs-12 col-sm-6" style={{ padding: 5 }}>
+		<div key={id} className="session-item" style={{ padding: 5 }}>
 			<div className="panel panel-default">
 				<div className="panel-heading">
 					<h3 className="panel-title">{title}</h3>
@@ -178,7 +180,9 @@ export function Sessions() {
 							Friday
 						</button>
 					</div>
-					<SessionList day={day} />
+					<div className="session-grid">
+						<SessionList day={day} />
+					</div>
 					{day == 'All' && <AllSessionList />}
 				</div>
 			</section>
@@ -188,7 +192,19 @@ export function Sessions() {
 
 export function SessionForm() {
 	const history = useHistory();
-
+	const rooms = [
+		'Jupiter',
+		'Earth',
+		'Venus',
+		'Mars',
+		'Mercury',
+		'Saturn',
+		'Sol'
+	];
+	const { data: speakersData, loading } = useQuery(SPEAKERS);
+	const [speakers, setSpeakers] = useState([]);
+	const [speaker, setSpeaker] = useState('');
+	console.log(speakersData);
 	const updateSessions = (cache, { data }) => {
 		cache.modify({
 			fields: {
@@ -203,11 +219,27 @@ export function SessionForm() {
 		});
 	};
 
+	const addSession = async (formikValues) => {
+		const getRandomValue = (lng) => {
+			return Math.floor(Math.random() * lng);
+		};
+		const extraValue = {
+			startsAt: getRandomValue(13) + ':00',
+			room: rooms[getRandomValue(rooms.length)],
+			speaker
+		};
+
+		const values = { ...formikValues, ...extraValue };
+		await create({ variables: { session: values, isDescription: true } });
+	};
+
 	const [create, { called, error, data }] = useMutation(CREATE_SESSION, {
 		update: updateSessions,
 		onCompleted: () => history.push('/conference/sessions')
 	});
-	console.log(called, data);
+
+	if (loading) return <p>Loading...</p>;
+
 	if (called) return <p>Session Submitted Successfully!</p>;
 
 	if (error) return <p>Failed to submit session</p>;
@@ -229,8 +261,9 @@ export function SessionForm() {
 					day: '',
 					level: ''
 				}}
-				onSubmit={async (values) => {
-					await create({ variables: { session: values, isDescription: true } });
+				onSubmit={(values) => {
+					// await create({ variables: { session: values, isDescription: true } });
+					addSession(values);
 				}}
 			>
 				{() => (
@@ -274,6 +307,18 @@ export function SessionForm() {
 								required
 							/>
 						</div>
+						{/* <div className="mb-3" style={{ paddingBottom: 5 }}>
+							<label htmlFor="speaker">Speaker</label>
+							<Field name="speaker" className="form-control">
+							</Field>
+						</div> */}
+						<AuthorCombobox
+							data={speakersData}
+							speakers={speakers}
+							setSpeakers={setSpeakers}
+							setSpeaker={setSpeaker}
+						/>
+
 						<div style={{ justifyContent: 'center', alignContent: 'center' }}>
 							<button className="btn btn-primary">Submit</button>
 						</div>

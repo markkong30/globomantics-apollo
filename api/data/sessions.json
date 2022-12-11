@@ -3623,20 +3623,6 @@
 			"format": "Session",
 			"level": "Beginner",
 			"id": "c8b0084f-ca92-4d64-8946-9aa27f7be438"
-		},
-		{
-			"title": "did it work dude",
-			"description": "ajsahsh",
-			"level": "Intermediate",
-			"day": "Thursday",
-			"id": "814b1f5e-e6df-440b-a91c-df198b5bbed2"
-		},
-		{
-			"title": "Catgirl",
-			"description": "Talk on catgirl",
-			"level": "Beginner",
-			"day": "Wednesday",
-			"id": "626a7140-3b87-4a3c-a7af-d6c2f54d6a0e"
 		}
 	]
 }

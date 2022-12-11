@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style-sessions.css';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 
 const SESSIONS_ATTRIBUTES = gql`
@@ -46,7 +46,7 @@ const SESSIONS = gql`
 `;
 
 const ALL_SESSIONS = gql`
-	query sessions {
+	query sessions($isDescription: Boolean!) {
 		sessions {
 			...SessionInfo
 		}
@@ -68,7 +68,7 @@ function AllSessionList() {
 
 function SessionList({ day }) {
 	// execute query and store response json
-	let isDescription = !!Math.floor(Math.random() * 2);
+	let isDescription = true;
 
 	const { loading, error, data } = useQuery(SESSIONS, {
 		variables: { day, isDescription }
@@ -187,6 +187,8 @@ export function Sessions() {
 }
 
 export function SessionForm() {
+	const history = useHistory();
+
 	const updateSessions = (cache, { data }) => {
 		cache.modify({
 			fields: {
@@ -202,7 +204,8 @@ export function SessionForm() {
 	};
 
 	const [create, { called, error, data }] = useMutation(CREATE_SESSION, {
-		update: updateSessions
+		update: updateSessions,
+		onCompleted: () => history.push('/conference/sessions')
 	});
 	console.log(called, data);
 	if (called) return <p>Session Submitted Successfully!</p>;

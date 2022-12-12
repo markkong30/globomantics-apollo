@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Formik, Field, Form } from 'formik';
 import AuthorCombobox from './AuthorCombobox';
 import { SPEAKERS } from './Speakers';
+import classNames from 'classnames';
 
 const SESSIONS_ATTRIBUTES = gql`
 	fragment SessionInfo on Session {
@@ -66,7 +67,7 @@ function AllSessionList() {
 	if (error) return <p>Error loading sessions!</p>;
 
 	return data.sessions.map((session) => (
-		<SessionItem key={session.id} session={session} />
+		<SessionItem key={session.id} session={session} allSession />
 	));
 }
 
@@ -105,7 +106,7 @@ function SessionList({ day }) {
 	return results;
 }
 
-function SessionItem({ session }) {
+function SessionItem({ session, allSession }) {
 	const { id, title, day, room, level, startsAt, speakers, description } =
 		session;
 	return (
@@ -185,7 +186,11 @@ export function Sessions() {
 					<div className="session-grid">
 						<SessionList day={day} />
 					</div>
-					{day == 'All' && <AllSessionList />}
+					{day == 'All' && (
+						<div className="session-grid">
+							<AllSessionList />
+						</div>
+					)}
 				</div>
 			</section>
 		</>

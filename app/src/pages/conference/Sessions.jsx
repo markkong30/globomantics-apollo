@@ -57,7 +57,9 @@ const ALL_SESSIONS = gql`
 `;
 
 function AllSessionList() {
-	const { loading, error, data } = useQuery(ALL_SESSIONS);
+	const { loading, error, data } = useQuery(ALL_SESSIONS, {
+		variables: { isDescription: true }
+	});
 
 	if (loading) return <p>Loading Sessions..</p>;
 

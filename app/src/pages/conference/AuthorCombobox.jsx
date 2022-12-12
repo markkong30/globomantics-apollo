@@ -8,12 +8,6 @@ import './AuthorCombobox.css';
 const AuthorCombobox = ({ data, speakers, setSpeakers, setSpeaker }) => {
 	const [input, setInput] = useState('');
 
-	useEffect(() => {
-		if (data) {
-			setSpeakers(data.speakers);
-		}
-	}, [data]);
-
 	const {
 		isOpen,
 		getToggleButtonProps,
@@ -43,8 +37,6 @@ const AuthorCombobox = ({ data, speakers, setSpeakers, setSpeaker }) => {
 			return !inputValue || speaker.name.toLowerCase().includes(inputValue);
 		};
 	}
-
-	if (!speakers || !data) return;
 
 	return (
 		<div>

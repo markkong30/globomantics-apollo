@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style-sessions.css';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { Link, useHistory } from 'react-router-dom';
@@ -204,7 +204,13 @@ export function SessionForm() {
 	const { data: speakersData, loading } = useQuery(SPEAKERS);
 	const [speakers, setSpeakers] = useState([]);
 	const [speaker, setSpeaker] = useState('');
-	console.log(speakersData);
+
+	useEffect(() => {
+		if (speakersData) {
+			setSpeakers(speakersData.speakers);
+		}
+	}, [speakersData]);
+
 	const updateSessions = (cache, { data }) => {
 		cache.modify({
 			fields: {
@@ -261,10 +267,7 @@ export function SessionForm() {
 					day: '',
 					level: ''
 				}}
-				onSubmit={(values) => {
-					// await create({ variables: { session: values, isDescription: true } });
-					addSession(values);
-				}}
+				onSubmit={addSession}
 			>
 				{() => (
 					<Form style={{ width: '100%', maxWidth: 500 }}>
@@ -307,11 +310,6 @@ export function SessionForm() {
 								required
 							/>
 						</div>
-						{/* <div className="mb-3" style={{ paddingBottom: 5 }}>
-							<label htmlFor="speaker">Speaker</label>
-							<Field name="speaker" className="form-control">
-							</Field>
-						</div> */}
 						<AuthorCombobox
 							data={speakersData}
 							speakers={speakers}

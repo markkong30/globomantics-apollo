@@ -1,52 +1,63 @@
-const { DataSource } = require("apollo-datasource");
-const lodashId = require("lodash-id");
+const { RESTDataSource } = require('@apollo/datasource-rest');
 
-const low = require("lowdb");
-const FileSync = require("lowdb/adapters/FileSync");
+const lodashId = require('lodash-id');
 
-const adapter = new FileSync("./data/users.json");
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('./data/users.json');
 const db = low(adapter);
 db._.mixin(lodashId);
 
-class UserDataSource extends DataSource {
-  constructor() {
-    super();
-  }
+class UserDataSource extends RESTDataSource {
+	constructor() {
+		super();
+	}
 
-  initialize(config) {
-    this.db = db.get("users");
-  }
+	initialize(config) {
+		this.db = db.get('users');
+	}
 
-  getUsers(args) {
-    return this.db.value();
-  }
+	getUsers(args) {
+		this.initialize();
 
-  getUserById(id) {
-    return this.db.getById(id).value();
-  }
+		return this.db.value();
+	}
 
-  createUser(user) {
-    return this.db.insert(user).write();
-  }
+	getUserById(id) {
+		this.initialize();
 
-  getUserByEmail(email) {
-    return this.db.find({ email }).value();
-  }
+		return this.db.getById(id).value();
+	}
 
-  toggleFavoriteSession(sessionId, userId) {
-    const favorites = this.db.getById(userId).get("favorites").value() || [];
+	createUser(user) {
+		this.initialize();
 
-    let set = [];
-    if (favorites.includes(sessionId)) {
-      // remove it
-      set = [...favorites.filter((fav) => fav !== sessionId)];
-    } else {
-      // add it
-      set = [...favorites, sessionId];
-    }
+		return this.db.insert(user).write();
+	}
 
-    return this.db.getById(userId).assign({ favorites: set }).write();
-  }
+	getUserByEmail(email) {
+		this.initialize();
+
+		return this.db.find({ email }).value();
+	}
+
+	toggleFavoriteSession(sessionId, userId) {
+		this.initialize();
+
+		const favorites = this.db.getById(userId).get('favorites').value() || [];
+
+		let set = [];
+		if (favorites.includes(sessionId)) {
+			// remove it
+			set = [...favorites.filter((fav) => fav !== sessionId)];
+		} else {
+			// add it
+			set = [...favorites, sessionId];
+		}
+
+		return this.db.getById(userId).assign({ favorites: set }).write();
+	}
 }
 
 module.exports = UserDataSource;

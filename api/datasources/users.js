@@ -9,9 +9,11 @@ const adapter = new FileSync('./data/users.json');
 const db = low(adapter);
 db._.mixin(lodashId);
 
-class UserDataSource extends RESTDataSource {
-	constructor() {
-		super();
+class UserDataSource {
+	constructor(options) {
+		this.token = options.token;
+		this.cookie = options.cookie;
+		this.cache = options.cache;
 	}
 
 	initialize(config) {

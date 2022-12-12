@@ -8,9 +8,11 @@ const adapter = new FileSync('./data/sessions.json');
 const db = low(adapter);
 db._.mixin(lodashId);
 
-class SessionDataSource extends RESTDataSource {
-	constructor() {
-		super();
+class SessionDataSource {
+	constructor(options) {
+		this.token = options.token;
+		this.cookie = options.cookie;
+		this.cache = options.cache;
 	}
 
 	initialize(config) {

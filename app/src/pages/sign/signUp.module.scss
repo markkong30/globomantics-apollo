@@ -1,0 +1,52 @@
+@use 'variables';
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	min-height: 80vh;
+	background-color: rgb(227, 227, 227);
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 800px;
+	min-height: 50vh;
+	border-radius: 1rem;
+	background-color: variables.$primary-background-color;
+	padding: 4rem 0;
+	color: white;
+}
+
+.heading {
+	font-size: 3.2rem;
+	font-weight: bold;
+	margin-bottom: 2rem;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+
+	.input {
+		width: 400px;
+	}
+
+	.button {
+		padding: 0.5rem 1rem;
+		border-radius: 0.8rem;
+		background-color: white;
+		color: variables.$primary-text-color;
+		font-weight: bolder;
+		margin-top: 1.5rem;
+		flex-grow: 0;
+		width: 100px;
+		height: 50px;
+	}
+}

@@ -44,28 +44,28 @@ const server = new ApolloServer({
 async function startApolloServer(typeDefs, resolvers) {
 	const server = new ApolloServer({
 		typeDefs,
-		resolvers
+		resolvers,
+		plugins: [cookieParser()]
 	});
 
 	const { url } = await startStandaloneServer(server, {
 		context: async ({ req }) => {
 			const { cache } = server;
 			const token = req.headers.token;
+			const cookie = req.headers.cookie;
 			return {
 				token,
+				cookie,
 				dataSources: {
-					sessionDataSource: new SessionDataSource(),
-					speakerDataSource: new SpeakerDataSource(),
-					userDataSource: new UserDataSource()
+					sessionDataSource: new SessionDataSource({ cache, token, cookie }),
+					speakerDataSource: new SpeakerDataSource({ cache, token, cookie }),
+					userDataSource: new UserDataSource({ cache, token, cookie })
 				}
 			};
 		}
 	});
 
-	console.log(`
-      🚀  Server is running at ${url}
-
-    `);
+	console.log(`🚀  Server is running at ${url}`);
 }
 
 startApolloServer(typeDefs, resolvers);

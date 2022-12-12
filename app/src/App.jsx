@@ -13,6 +13,7 @@ import {
 	HttpLink,
 	InMemoryCache
 } from '@apollo/client';
+import SignUp from './pages/sign/SignUp';
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -40,6 +41,9 @@ function AppRouter() {
 					</Route>
 					<Route path="/conference">
 						<Conference />
+					</Route>
+					<Route path="/signup">
+						<SignUp />
 					</Route>
 					<Route path="/">
 						<Home />

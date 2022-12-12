@@ -63,6 +63,11 @@
         "79874",
         "78152"
       ]
+    },
+    {
+      "email": "admin@123.com",
+      "hash": "$2a$10$DntE02kw15NoG1EPArmTCu.pw980fgLhJZxAC8jIndP.pKMa5yLmS",
+      "id": "7c472581-6158-4879-9732-0664c54892a3"
     }
   ]
 }

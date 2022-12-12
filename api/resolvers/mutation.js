@@ -38,9 +38,9 @@ module.exports = {
 
 		const token = authUtils.createToken(dbUser);
 
-		res.cookie('token', token, {
-			httpOnly: true
-		});
+		// res.cookie('token', token, {
+		// 	httpOnly: true
+		// });
 
 		return {
 			user: {

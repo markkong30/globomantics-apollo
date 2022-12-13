@@ -28,11 +28,12 @@ async function startApolloServer(typeDefs, resolvers) {
 		context: async ({ req, res }) => {
 			const { cache } = server;
 			const token = req.headers.token;
-			const user = getCookie('token', req.headers.cookie);
+			const cookies = req.headers.cookie;
+
 			return {
 				token,
 				res,
-				user,
+				cookies,
 				dataSources: {
 					sessionDataSource: new SessionDataSource(),
 					speakerDataSource: new SpeakerDataSource(),

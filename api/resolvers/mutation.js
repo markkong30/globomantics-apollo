@@ -1,5 +1,6 @@
 const authUtils = require('../utils/auth');
 const { GraphQLError } = require('graphql');
+const { getCookie } = require('../helpers.js');
 
 module.exports = {
 	createSession: async (parent, args, { dataSources }, info) => {
@@ -87,7 +88,9 @@ module.exports = {
 			}
 		};
 	},
-	userInfo: async (parent, args, { dataSources, user }, info) => {
+	userInfo: async (parent, args, { dataSources, cookies }, info) => {
+		const user = getCookie('token', cookies);
+
 		if (user) {
 			const existingUser = authUtils.verifyToken(user);
 
@@ -107,11 +110,14 @@ module.exports = {
 		};
 	},
 	toggleFavoriteSession: async (parent, args, context, info) => {
-		if (context.user) {
+		const { dataSources, cookies } = context;
+		const user = authUtils.verifyToken(getCookie('token', cookies));
+
+		if (user) {
 			const user =
 				await context.dataSources.userDataSource.toggleFavoriteSession(
 					args.sessionId,
-					context.user.sub
+					user.sub
 				);
 			return user;
 		}

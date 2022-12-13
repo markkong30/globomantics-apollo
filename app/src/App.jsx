@@ -10,7 +10,7 @@ import { Footer } from './Footer';
 import {
 	ApolloClient,
 	ApolloProvider,
-	HttpLink,
+	createHttpLink,
 	InMemoryCache
 } from '@apollo/client';
 import SignUp from './pages/sign/SignUp';
@@ -18,10 +18,10 @@ import SignUp from './pages/sign/SignUp';
 // Initialize Apollo Client
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
-	link: new HttpLink({
-		uri: 'http://localhost:4000/graphql' // your graphql server link
-	}),
-	credentials: 'same-origin'
+	link: createHttpLink({
+		uri: '/graphql',
+		credentials: 'same-origin'
+	})
 });
 
 function AppRouter() {

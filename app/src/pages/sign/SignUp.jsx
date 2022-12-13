@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikProps, useFormik } from 'formik';
 import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import styles from './signUp.module.scss';
 import { SIGN_UP } from './mutation.helper';
 import { useHistory } from 'react-router-dom';

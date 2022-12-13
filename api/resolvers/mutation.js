@@ -17,7 +17,9 @@ module.exports = {
 		});
 		return session;
 	},
-	signUp: async (parent, { credentials }, { dataSources, res }, info) => {
+	signUp: async (parent, { credentials }, context, info) => {
+		const { dataSources, res } = context;
+
 		const { email, password } = credentials;
 		const userCredentials = { email: email.toLowerCase(), password };
 
@@ -38,9 +40,9 @@ module.exports = {
 
 		const token = authUtils.createToken(dbUser);
 
-		// res.cookie('token', token, {
-		// 	httpOnly: true
-		// });
+		res.cookie('token', token, {
+			httpOnly: true
+		});
 
 		return {
 			user: {
@@ -49,6 +51,7 @@ module.exports = {
 			}
 		};
 	},
+
 	signIn: async (parent, { credentials }, { dataSources, res }, info) => {
 		const { email, password } = credentials;
 		const userCredentials = { email: email.toLowerCase(), password };
@@ -71,7 +74,6 @@ module.exports = {
 		}
 
 		const token = authUtils.createToken(existingUser);
-
 		res.cookie('token', token, {
 			httpOnly: true
 		});

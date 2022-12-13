@@ -10,12 +10,6 @@ const db = low(adapter);
 db._.mixin(lodashId);
 
 class UserDataSource {
-	constructor(options) {
-		this.token = options.token;
-		this.cookie = options.cookie;
-		this.cache = options.cache;
-	}
-
 	initialize(config) {
 		this.db = db.get('users');
 	}

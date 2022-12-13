@@ -1,4 +1,5 @@
 const authUtils = require('../utils/auth');
+const { GraphQLError } = require('graphql');
 
 module.exports = {
 	createSession: async (parent, args, { dataSources }, info) => {
@@ -28,7 +29,7 @@ module.exports = {
 		);
 
 		if (existingUser) {
-			throw new Error('A user account with that email already exists.');
+			throw new GraphQLError('A user account with that email already exists.');
 		}
 
 		const hash = authUtils.hashPassword(userCredentials.password);
@@ -61,7 +62,7 @@ module.exports = {
 		);
 
 		if (!existingUser) {
-			throw new Error('Incorrect email address or password.');
+			throw new GraphQLError('Incorrect email address or password.');
 		}
 
 		const isValidPassword = authUtils.verifyPassword(
@@ -70,10 +71,11 @@ module.exports = {
 		);
 
 		if (!isValidPassword) {
-			throw new Error('Incorrect email address or password.');
+			throw new GraphQLError('Incorrect email address or password.');
 		}
 
 		const token = authUtils.createToken(existingUser);
+
 		res.cookie('token', token, {
 			httpOnly: true
 		});
@@ -87,8 +89,10 @@ module.exports = {
 	},
 	userInfo: async (parent, args, { dataSources, user }, info) => {
 		if (user) {
+			const existingUser = authUtils.verifyToken(user);
+
 			return {
-				user: { id: user.sub, email: user.email }
+				user: { id: existingUser.sub, email: existingUser.email }
 			};
 		}
 

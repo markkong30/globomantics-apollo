@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Home } from './pages/home/Home';
 import { Media } from './pages/media/Media';
 import { OurStory } from './pages/our-story/OurStory';
 import { Robotics } from './pages/robotics/Robotics';
 import { Conference } from './pages/conference/Conference';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
-import { Header } from './Header';
+import { Header } from './pages/header/Header';
 import { Footer } from './Footer';
 import {
 	ApolloClient,
@@ -14,6 +14,8 @@ import {
 	InMemoryCache
 } from '@apollo/client';
 import SignUp from './pages/sign/SignUp';
+import { UserInfo } from './context/userContext';
+import SignIn from './pages/sign/SignIn';
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -27,30 +29,35 @@ const client = new ApolloClient({
 function AppRouter() {
 	return (
 		<div id="wrapper">
-			<Router>
-				<Header />
-				<Switch>
-					<Route path="/media">
-						<Media />
-					</Route>
-					<Route path="/our-story">
-						<OurStory />
-					</Route>
-					<Route path="/robotics">
-						<Robotics />
-					</Route>
-					<Route path="/conference">
-						<Conference />
-					</Route>
-					<Route path="/signup">
-						<SignUp />
-					</Route>
-					<Route path="/">
-						<Home />
-					</Route>
-				</Switch>
-				<Footer />
-			</Router>
+			<UserInfo>
+				<Router>
+					<Header />
+					<Switch>
+						<Route path="/media">
+							<Media />
+						</Route>
+						<Route path="/our-story">
+							<OurStory />
+						</Route>
+						<Route path="/robotics">
+							<Robotics />
+						</Route>
+						<Route path="/conference">
+							<Conference />
+						</Route>
+						<Route path="/signup">
+							<SignUp />
+						</Route>
+						<Route path="/signin">
+							<SignIn />
+						</Route>
+						<Route path="/">
+							<Home />
+						</Route>
+					</Switch>
+					<Footer />
+				</Router>
+			</UserInfo>
 		</div>
 	);
 }

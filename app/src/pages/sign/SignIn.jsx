@@ -8,17 +8,17 @@ import {
 } from 'formik';
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import styles from './signUp.module.scss';
-import { SIGN_UP } from './mutation.helper';
+import styles from './signIn.module.scss';
+import { SIGN_IN } from './mutation.helper';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
-const SignUp = () => {
+const SignIn = () => {
 	const { user, getUserInfo } = useContext(UserContext);
 	const history = useHistory();
 	const [values, setValues] = useState({});
 	const [submitError, setSubmitError] = useState('');
-	const [signup, { data }] = useMutation(SIGN_UP, {
+	const [signin, { data }] = useMutation(SIGN_IN, {
 		onCompleted: () => {
 			getUserInfo().then(() => history.goBack());
 		},
@@ -38,7 +38,7 @@ const SignUp = () => {
 	};
 
 	const onSubmit = (values) => {
-		signup({ variables: { credentials: values } });
+		signin({ variables: { credentials: values } });
 	};
 	const validate = (values) => {
 		const errors = {};
@@ -82,7 +82,7 @@ const SignUp = () => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
-				<h1 className={styles.heading}>Sign Up</h1>
+				<h1 className={styles.heading}>Sign In</h1>
 				<Formik
 					initialValues={formik.initialValues}
 					onSubmit={formik.handleSubmit}
@@ -120,7 +120,7 @@ const SignUp = () => {
 								<p className={styles['submit-error']}>{submitError}</p>
 							)}
 							<button type="submit" className={styles.button}>
-								Sign Up
+								Sign In
 							</button>
 						</div>
 					</Form>
@@ -130,4 +130,4 @@ const SignUp = () => {
 	);
 };
 
-export default SignUp;
+export default SignIn;

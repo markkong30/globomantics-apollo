@@ -89,6 +89,7 @@ module.exports = {
 		};
 	},
 	userInfo: async (parent, args, { dataSources, cookies }, info) => {
+		if (!cookies) return;
 		const user = getCookie('token', cookies);
 
 		if (user) {

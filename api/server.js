@@ -3,50 +3,62 @@ const { ApolloServer } = require('@apollo/server');
 const SessionDataSource = require('./datasources/sessions');
 const SpeakerDataSource = require('./datasources/speakers');
 const UserDataSource = require('./datasources/users');
+const { expressMiddleware } = require('@apollo/server/express4');
+const {
+	ApolloServerPluginDrainHttpServer
+} = require('@apollo/server/plugin/drainHttpServer');
 const { startStandaloneServer } = require('@apollo/server/standalone');
 const gql = require('graphql-tag');
 const { readFileSync } = require('fs');
 const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }));
 const resolvers = require('./resolvers/index');
+const http = require('http');
 const auth = require('./utils/auth');
 const cors = require('cors');
+const { json } = require('body-parser');
+const express = require('express');
 const cookieParser = require('cookie-parser');
 const { getCookie } = require('./helpers.js');
 
-async function startApolloServer(typeDefs, resolvers) {
-	const server = new ApolloServer({
-		typeDefs,
-		resolvers,
-		plugins: [
-			cookieParser(),
-			cors({
-				origin: 'http://localhost:3000',
-				credentials: true
-			})
-		]
-	});
+const app = express();
+const httpServer = http.createServer(app);
+const server = new ApolloServer({
+	typeDefs,
+	resolvers,
+	plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
+});
 
-	const { url } = await startStandaloneServer(server, {
-		context: async ({ req, res }) => {
-			const { cache } = server;
-			const token = req.headers.token;
-			const cookies = req.headers.cookie;
+server.start().then((resolve) => {
+	app.use(
+		'https://globomantics-apollo-production-dc23.up.railway.app/',
+		cors({
+			origin: [
+				'https://globomantics-apollo.up.railway.app/',
+				'https://studio.apollographql.com'
+			],
+			credentials: true
+		}),
+		json(),
+		expressMiddleware(server, {
+			context: async ({ req, res }) => {
+				const { cache } = server;
+				const token = req.headers.token;
+				const cookies = req.headers.cookie;
 
-			return {
-				token,
-				res,
-				cookies,
-				dataSources: {
-					sessionDataSource: new SessionDataSource(),
-					speakerDataSource: new SpeakerDataSource(),
-					userDataSource: new UserDataSource()
-				}
-			};
-		},
-		listen: { port: process.env.PORT || 4000 }
-	});
+				return {
+					token,
+					res,
+					cookies,
+					dataSources: {
+						sessionDataSource: new SessionDataSource(),
+						speakerDataSource: new SpeakerDataSource(),
+						userDataSource: new UserDataSource()
+					}
+				};
+			}
+		})
+	);
 
-	console.log(`🚀  Server is running at ${url}`);
-}
-
-startApolloServer(typeDefs, resolvers);
+	httpServer.listen({ port: process.env.PORT || 4000 }, resolve);
+	console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+});

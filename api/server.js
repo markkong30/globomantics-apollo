@@ -40,7 +40,8 @@ async function startApolloServer(typeDefs, resolvers) {
 					userDataSource: new UserDataSource()
 				}
 			};
-		}
+		},
+		listen: { port: process.env.PORT || 4000 }
 	});
 
 	console.log(`🚀  Server is running at ${url}`);

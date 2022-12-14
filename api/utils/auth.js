@@ -1,11 +1,11 @@
-const JWT = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const JWT = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const createToken = (userInfo) =>
-  JWT.sign({ sub: userInfo.id, email: userInfo.email }, process.env.SECRET);
+	JWT.sign({ sub: userInfo.id, email: userInfo.email }, process.env.SECRET);
 
 const verifyPassword = (attemptedPw, hashedPw) =>
-  bcrypt.compareSync(attemptedPw, hashedPw);
+	bcrypt.compareSync(attemptedPw, hashedPw);
 
 const hashPassword = (password) => bcrypt.hashSync(password);
 

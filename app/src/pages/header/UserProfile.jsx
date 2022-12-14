@@ -23,7 +23,7 @@ const UserProfile = ({ user }) => {
 	const buttonRef = useRef(null);
 	const [signout, { data }] = useMutation(SIGN_OUT, {
 		onCompleted: () => {
-			getUserInfo().then(() => history.goBack());
+			getUserInfo().then(() => history.push('/'));
 		}
 	});
 

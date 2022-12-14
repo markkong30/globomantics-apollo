@@ -73,6 +73,11 @@
       "email": "asd@adsssss.com",
       "hash": "$2a$10$g/Ez2n.QiKmlWEgNPRn2peFtMfLexfhVwgwURUj9n2lpDxWPjNjky",
       "id": "94fb160f-39bd-47e3-8a01-c45fba72712d"
+    },
+    {
+      "email": "admin@12356.com",
+      "hash": "$2a$10$rzYZFTSb4V3Ugg6gBhyo.e2d6YluMZdf5ftrtpQoyW9TQoVi9cSJi",
+      "id": "c87357c3-a233-44eb-ae1a-af5669ead0a0"
     }
   ]
 }

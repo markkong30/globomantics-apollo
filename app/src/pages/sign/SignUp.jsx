@@ -6,6 +6,7 @@ import {
 	useFormik,
 	ErrorMessage
 } from 'formik';
+import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import styles from './signUp.module.scss';
@@ -37,38 +38,26 @@ const SignUp = () => {
 		setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const onSubmit = (values) => {
+	const onSubmit = (values, actions) => {
+		actions.setSubmitting(false);
+		actions.resetForm({
+			values: formik.initialValues
+		});
 		signup({ variables: { credentials: values } });
 	};
-	const validate = (values) => {
-		const errors = {};
 
-		if (!values.email) {
-			errors.email = 'Required';
-		} else if (
-			!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-		) {
-			errors.email = 'Invalid email address';
-		}
-
-		if (!values.password) {
-			errors.password = 'Required';
-		} else if (values.password.length < 5) {
-			errors.password = 'Too short';
-		}
-
-		return errors;
-	};
-
-	const formik = useFormik({
+	const formik = {
 		initialValues: {
 			email: '',
 			password: ''
 		},
-		validate,
+		validationSchema: Yup.object({
+			email: Yup.string().email('Invalid email address').required('Required'),
+			password: Yup.string().min(6, 'Too short').required('Required')
+		}),
 		onSubmit,
-		validateOnChange: false
-	});
+		validateOnChange: true
+	};
 
 	if (user) {
 		return (
@@ -85,45 +74,50 @@ const SignUp = () => {
 				<h1 className={styles.heading}>Sign Up</h1>
 				<Formik
 					initialValues={formik.initialValues}
-					onSubmit={formik.handleSubmit}
+					validationSchema={formik.validationSchema}
+					onSubmit={formik.onSubmit}
 					validateOnChange={formik.validateOnChange}
 				>
-					<Form>
-						<div className={styles.form}>
-							<div className={styles.input}>
-								<label htmlFor="email">Email</label>
-								<Field
-									name="email"
-									id="email"
-									type="email"
-									className="form-control"
-									onChange={formik.handleChange}
-									value={formik.values.email}
-									required
-								/>
-								<ErrorMessage name="name" />
+					{(formik) => (
+						<Form>
+							<div className={styles.form}>
+								<div className={styles.input}>
+									<label htmlFor="email">Email</label>
+									<Field
+										name="email"
+										id="email"
+										type="email"
+										className="form-control"
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+										value={formik.values.email}
+										required
+									/>
+									<ErrorMessage name="email" />
+								</div>
+								<div className={styles.input}>
+									<label htmlFor="password">Password</label>
+									<Field
+										name="password"
+										id="password"
+										type="password"
+										className="form-control"
+										onChange={formik.handleChange}
+										onBlur={formik.handleBlur}
+										value={formik.values.password}
+										required
+									/>
+									<ErrorMessage name="password" />
+								</div>
+								{submitError && (
+									<p className={styles['submit-error']}>{submitError}</p>
+								)}
+								<button type="submit" className={styles.button}>
+									Sign Up
+								</button>
 							</div>
-							<div className={styles.input}>
-								<label htmlFor="password">Password</label>
-								<Field
-									name="password"
-									id="password"
-									type="password"
-									className="form-control"
-									onChange={formik.handleChange}
-									value={formik.values.passowrd}
-									required
-								/>
-								<ErrorMessage name="email" />
-							</div>
-							{submitError && (
-								<p className={styles['submit-error']}>{submitError}</p>
-							)}
-							<button type="submit" className={styles.button}>
-								Sign Up
-							</button>
-						</div>
-					</Form>
+						</Form>
+					)}
 				</Formik>
 			</div>
 		</div>

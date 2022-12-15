@@ -19,8 +19,10 @@ export const UserInfo = ({ children }) => {
 	const [getUserInfo, { data }] = useMutation(userInfoMutation);
 
 	useEffect(() => {
-		getUserInfo();
-	}, []);
+		if (!data) {
+			getUserInfo();
+		}
+	}, [data]);
 
 	return (
 		<UserContext.Provider value={{ user: data?.userInfo?.user, getUserInfo }}>

@@ -7,18 +7,15 @@ const { expressMiddleware } = require('@apollo/server/express4');
 const {
 	ApolloServerPluginDrainHttpServer
 } = require('@apollo/server/plugin/drainHttpServer');
-const { startStandaloneServer } = require('@apollo/server/standalone');
 const gql = require('graphql-tag');
 const { readFileSync } = require('fs');
 const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }));
 const resolvers = require('./resolvers/index');
 const http = require('http');
-const auth = require('./utils/auth');
 const cors = require('cors');
 const { json } = require('body-parser');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const { getCookie } = require('./helpers.js');
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -40,16 +37,14 @@ server.start().then((resolve) => {
 			credentials: true
 		}),
 		json(),
+		cookieParser(),
 		expressMiddleware(server, {
 			context: async ({ req, res }) => {
-				const { cache } = server;
-				const token = req.headers.token;
-				const cookies = req.headers.cookie;
+				const userToken = req.cookies[process.env.TOKEN];
 
 				return {
-					token,
 					res,
-					cookies,
+					userToken,
 					dataSources: {
 						sessionDataSource: new SessionDataSource(),
 						speakerDataSource: new SpeakerDataSource(),

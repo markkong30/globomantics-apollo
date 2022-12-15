@@ -21,8 +21,7 @@ import SignIn from './pages/sign/SignIn';
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: createHttpLink({
-		uri: 'https://globomantics-apollo-production-dc23.up.railway.app/graphql',
-		// uri: '/graphql',
+		uri: '/graphql',
 		credentials: 'include'
 	})
 });

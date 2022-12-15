@@ -18,11 +18,9 @@ import { UserInfo } from './context/userContext';
 import SignIn from './pages/sign/SignIn';
 
 const uri =
-	process.env.NODE_ENV === 'development'
+	process.env.REACT_APP_ENV === 'development'
 		? 'http://localhost:4000'
 		: 'https://globomantics-apollo-production-dc23.up.railway.app';
-
-console.log(process.env.NODE_ENV, uri);
 
 const client = new ApolloClient({
 	cache: new InMemoryCache(),

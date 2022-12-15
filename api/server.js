@@ -34,7 +34,8 @@ server.start().then((resolve) => {
 		cors({
 			origin: [
 				'https://globomantics-apollo.up.railway.app/',
-				'https://studio.apollographql.com'
+				'https://studio.apollographql.com/',
+				'http://localhost:3000/'
 			],
 			credentials: true
 		}),

@@ -17,11 +17,15 @@ import SignUp from './pages/sign/SignUp';
 import { UserInfo } from './context/userContext';
 import SignIn from './pages/sign/SignIn';
 
-// Initialize Apollo Client
+const uri =
+	process.env.NODE_ENV === 'development'
+		? 'http://localhost:4000'
+		: 'https://globomantics-apollo-production-dc23.up.railway.app';
+
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: createHttpLink({
-		uri: '/graphql',
+		uri,
 		credentials: 'include'
 	})
 });

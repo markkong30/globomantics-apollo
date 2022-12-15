@@ -27,12 +27,12 @@ const server = new ApolloServer({
 
 server.start().then((resolve) => {
 	app.use(
-		'/graphql',
+		'/',
 		cors({
 			origin: [
-				'https://globomantics-apollo.up.railway.app/',
-				'https://studio.apollographql.com/',
-				'http://localhost:3000/'
+				'https://globomantics-apollo.up.railway.app',
+				'https://studio.apollographql.com',
+				'http://localhost:3000'
 			],
 			credentials: true
 		}),

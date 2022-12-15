@@ -1,11 +1,4 @@
-import {
-	Field,
-	Form,
-	Formik,
-	FormikProps,
-	useFormik,
-	ErrorMessage
-} from 'formik';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
@@ -17,7 +10,6 @@ import { UserContext } from '../../context/userContext';
 const SignUp = () => {
 	const { user, getUserInfo } = useContext(UserContext);
 	const history = useHistory();
-	const [values, setValues] = useState({});
 	const [submitError, setSubmitError] = useState('');
 	const [signup, { data }] = useMutation(SIGN_UP, {
 		onCompleted: () => {
@@ -32,11 +24,7 @@ const SignUp = () => {
 				history.goBack();
 			}, 3000);
 		}
-	}, [user]);
-
-	const handleChange = (e) => {
-		setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-	};
+	}, [user, data]);
 
 	const onSubmit = (values, actions) => {
 		actions.setSubmitting(false);

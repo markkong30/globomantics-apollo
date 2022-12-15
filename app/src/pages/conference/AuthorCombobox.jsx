@@ -1,6 +1,4 @@
-import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
-import { SPEAKERS } from './Speakers';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useCombobox } from 'downshift';
 import './AuthorCombobox.css';

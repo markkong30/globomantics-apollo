@@ -21,7 +21,7 @@ const UserProfile = ({ user }) => {
 	const { getUserInfo } = useContext(UserContext);
 	const history = useHistory();
 	const buttonRef = useRef(null);
-	const [signout, { data }] = useMutation(SIGN_OUT, {
+	const [signout] = useMutation(SIGN_OUT, {
 		onCompleted: () => {
 			getUserInfo().then(() => history.push('/'));
 		}

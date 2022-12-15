@@ -22,7 +22,7 @@ export const UserInfo = ({ children }) => {
 		if (!data) {
 			getUserInfo();
 		}
-	}, [data]);
+	}, [getUserInfo, data]);
 
 	return (
 		<UserContext.Provider value={{ user: data?.userInfo?.user, getUserInfo }}>

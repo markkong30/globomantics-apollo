@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Home } from './pages/home/Home';
 import { Media } from './pages/media/Media';
 import { OurStory } from './pages/our-story/OurStory';
@@ -21,6 +21,8 @@ const uri =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:4000'
 		: 'https://globomantics-apollo-production-dc23.up.railway.app';
+
+console.log(process.env.NODE_ENV, uri);
 
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
